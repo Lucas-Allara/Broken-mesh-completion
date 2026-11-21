@@ -1,0 +1,95 @@
+% Layout of the poster: the title and the UTDT logo on white, the five versions of Homer, and
+% every section on a light pink card, with introduction and contribution on the left, results on
+% the right, and limitations, conclusions and references at the bottom. The text comes from
+% content.tex and the figures from blocks.tex.
+\newcommand{\heading}[1]{%
+  {\boldfont\fontsize{22}{26}\selectfont\addfontfeatures{LetterSpace=14}\color{burgundy}\stripes{6}{burgundy}\hspace{3.5mm}\MakeUppercase{#1}\par}
+  \vspace{6mm}}
+% Card: \card{x}{y}{width}{height}, in mm from the upper left corner.
+\newcommand{\card}[4]{%
+  \fill[card, rounded corners=6mm] ($(current page.north west) + (#1mm, -#2mm)$) rectangle ++(#3mm, -#4mm);}
+
+\begin{document}
+\begin{tikzpicture}[remember picture, overlay]
+
+% ---------------------------------------------------------------- header
+\placeblock{25}{28}{450}{%
+  {\heavyfont\fontsize{82}{86}\selectfont \TitleFirst\\\textcolor{burgundy}{\TitleSecond}\par}
+  \vspace{8mm}
+  {\color{burgundy}\rule{130mm}{2.2mm}}\par
+  \vspace{7mm}
+  {\fontsize{23}{30}\selectfont\color{ink2}\Subtitle\par}}
+\node[anchor=north east, inner sep=0pt] at ($(current page.north east) + (-25mm, -34mm)$)
+  {\includegraphics[width=165mm]{utdt_logo_ink.pdf}};
+\node[anchor=north east, inner sep=0pt, text width=165mm]
+  at ($(current page.north east) + (-25mm, -64mm)$) {\resetspaces\raggedleft
+  {\fontsize{22}{28}\selectfont\color{ink2}\Course\par}
+  \vspace{9mm}
+  {\boldfont\fontsize{32}{38}\selectfont\color{burgundy}\Author\par}
+  \vspace{2mm}
+  {\fontsize{22}{28}\selectfont\color{ink2}\Date\par}};
+
+% ---------------------------------------------------------------- teaser
+\placeblock{60}{150}{580}{%
+  \TeaserBlock{580}{\fontsize{24}{30}\selectfont}{\ColSymmetry}
+  \vspace{3mm}
+  {\captiontext\makebox[580mm][c]{\TeaserCaption}\par}}
+
+% ---------------------------------------------------------------- cards
+\card{25}{318}{315}{518}
+\card{355}{318}{320}{518}
+\card{25}{848}{196}{137}
+\card{233}{848}{222}{137}
+\card{467}{848}{208}{137}
+
+% ---------------------------------------------------------------- introduction and contribution
+\placeblock{37}{330}{291}{%
+  \heading{\SecIntro}
+  {\bodytext\IntroTextA}
+  \vspace{6mm}
+  \WBeside{150}{134}
+  \vspace{6mm}
+  {\bodytext\IntroTextB}
+  \vspace{9mm}
+  \heading{\SecContribution}
+  {\bodytext\ContributionText}
+  \vspace{6mm}
+  {\centering\scalebox{0.98}{\Pipeline}\par}
+  \vspace{8mm}
+  \StageRow{122}{\FairingImage{52}}{163}{\smalltext\FairingText}
+  \vspace{7mm}
+  \StageRow{122}{\SymmetryImage{56}}{163}{\smalltext\SymmetryText}}
+
+% ---------------------------------------------------------------- results
+\placeblock{367}{330}{296}{%
+  \heading{\SecResults}
+  \BigNumbers{95}
+  \vspace{6mm}
+  \ErrorChart{296}
+  \vspace{6mm}
+  \RendersBlock{296}{\fontsize{18}{23}\selectfont}
+  \vspace{2mm}
+  {\captiontext\RendersCaption\par}
+  \vspace{6mm}
+  \ResultsTable}
+
+% ---------------------------------------------------------------- limitations, conclusions and references
+\placeblock{37}{860}{172}{%
+  \heading{\SecLimitations}
+  {\notetext\LimitationsText}}
+\placeblock{245}{860}{198}{%
+  \heading{\SecConclusions}
+  {\notetext\ConclusionsText}}
+\placeblock{479}{860}{184}{%
+  \heading{\SecReferences}
+  {\finetext\ReferencesText
+   \vspace{3mm}
+   \begin{minipage}[b]{150mm}\resetspaces\raggedright\Credits\end{minipage}\par}}
+% The QR code stands in the lower right corner of the card of the references.
+\node[anchor=south east, inner sep=0pt] at ($(current page.north west) + (663mm, -975mm)$) {\QR{26mm}};
+
+% ---------------------------------------------------------------- footer
+\fill[burgundy] ($(current page.south west) + (0, 7mm)$) rectangle (current page.south east);
+
+\end{tikzpicture}
+\end{document}

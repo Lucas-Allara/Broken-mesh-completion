@@ -1,0 +1,93 @@
+% Preamble of the poster (70 x 100 cm): the palette of the UTDT engineering school (burgundy
+% #820A32, ink #2B2B2D) and Montserrat. poster.tex inputs this file, content.tex, blocks.tex and
+% layout.tex.
+% figures/utdt_logo_ink.pdf: the vector UTDT logo, copied from the cover of the UTDT career guide
+% 2021 (utdt.edu/Descargas/folletos2021/UTDT_GUIADECARRERAS_2021.pdf) and recolored to the ink of
+% the text. The other figures come from poster_figures.py.
+\documentclass{article}
+\usepackage[paperwidth=700mm, paperheight=1000mm, margin=0mm]{geometry}
+\usepackage{fontspec}
+\usepackage{unicode-math}
+\setmainfont{Montserrat}[
+  Extension = .otf,
+  UprightFont = *-Regular,
+  BoldFont = *-SemiBold,
+  ItalicFont = *-Italic,
+  BoldItalicFont = *-SemiBoldItalic,
+]
+\newfontfamily\heavyfont{Montserrat}[Extension = .otf, UprightFont = *-ExtraBold]
+\newfontfamily\boldfont{Montserrat}[Extension = .otf, UprightFont = *-Bold]
+\setmathfont{FiraMath-Regular.otf}
+\usepackage{xcolor}
+\usepackage{graphicx}
+\usepackage{qrcode}
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta, calc, positioning}
+\graphicspath{{figures/}}
+
+\definecolor{burgundy}{HTML}{820A32}
+\definecolor{ink}{HTML}{2B2B2D}
+\definecolor{ink2}{HTML}{5E5E63}
+\definecolor{soft}{HTML}{F6EFF1}
+\definecolor{card}{HTML}{F9EEF2}
+\definecolor{rule}{HTML}{E4DDE0}
+% Colors of the three results, as in the renders and the plot. The amber of fairing is too
+% light for text, so text names fairing in a darker amber.
+\definecolor{method}{HTML}{008C9A}
+\definecolor{faired}{HTML}{D9922E}
+\definecolor{fairedtext}{HTML}{B06A0F}
+\definecolor{symmetry}{HTML}{820A32}
+
+\pagestyle{empty}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{0pt}
+\hyphenpenalty=10000
+\exhyphenpenalty=10000
+\color{ink}
+
+\newcommand{\bodytext}{\fontsize{22}{30}\selectfont}
+\newcommand{\smalltext}{\fontsize{20}{26}\selectfont}
+\newcommand{\notetext}{\fontsize{18}{23.5}\selectfont}
+\newcommand{\tinytext}{\fontsize{17}{22}\selectfont}
+\newcommand{\finetext}{\fontsize{14.5}{18.5}\selectfont}
+\newcommand{\captiontext}{\tinytext\color{ink2}}
+
+% TikZ sets \spaceskip in em of the font size of the node: this restores the spacing of each font.
+\newcommand{\resetspaces}{\spaceskip=0pt\xspaceskip=0pt\relax}
+
+% Absolute placement: \placeblock{x}{y}{width}{content}, in mm from the upper left corner.
+\newcommand{\placeblock}[4]{%
+  \node[anchor=north west, inner sep=0pt, text width=#3mm]
+    at ($(current page.north west) + (#1mm, -#2mm)$) {\resetspaces\raggedright #4};}
+
+\newcommand{\bib}[1]{\par\vspace{0.6mm}\hangindent=9mm\hangafter=1\makebox[9mm][l]{[#1]}}
+\newcommand{\tabhead}[1]{{\bfseries #1}}
+\newcommand{\collabel}[3]{\makebox[#1][c]{\textcolor{#2}{\bfseries #3}}}
+
+% Big number with its caption: \bignumber{width}{color}{number}{caption}.
+\newcommand{\bignumber}[4]{%
+  \begin{minipage}[t]{#1}\resetspaces\raggedright
+    % \leavevmode starts the line before the color, so that the numbers align on their baselines.
+    {\heavyfont\fontsize{84}{88}\selectfont\leavevmode\color{#2}#3\par}
+    \vspace{2mm}
+    {\smalltext #4\par}
+  \end{minipage}}
+
+% The three slanted bars of the UTDT isotype, as the mark of a section heading:
+% \stripes{height in mm}{color}.
+\newcommand{\stripes}[2]{%
+  \tikz[baseline=0pt, x=#1mm/9, y=#1mm/9]{%
+    \foreach \i in {0, 1, 2}
+      \fill[#2] (\i*4.3, 0) -- ++(2.5, 0) -- ++(4.3, 9) -- ++(-2.5, 0) -- cycle;}}
+
+\tikzset{
+  every node/.append style={execute at begin node=\resetspaces},
+  stage/.style={draw=ink2!55, fill=soft, rounded corners=3mm, line width=1.1mm,
+    minimum height=23mm, text width=47mm, align=center, inner sep=2mm,
+    font=\fontsize{20}{25}\selectfont},
+  own/.style={stage, line width=1.7mm, font=\fontsize{20}{25}\selectfont\bfseries},
+  arrow/.style={-{Latex[length=6mm, width=6mm]}, line width=1.3mm, draw=ink2},
+  note/.style={font=\fontsize{17}{21}\selectfont, text=ink2},
+}
+
+\newcommand{\QR}[1]{\qrcode[height=#1]{https://github.com/Lucas-Allara/Broken-mesh-completion}}

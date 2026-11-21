@@ -1,0 +1,15 @@
+build/
+# the meshes of the experiment, which gsd_experiment --meshes writes again
+results/meshes/
+# what TetGen leaves in the working directory when it skips a facet
+tetgen-tmpfile*
+
+# the environment of the figure scripts
+.venv/
+__pycache__/
+*.pyc
+
+# leftovers from unzipping on macOS
+__MACOSX/
+._*
+.DS_Store

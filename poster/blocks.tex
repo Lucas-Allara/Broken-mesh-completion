@@ -1,0 +1,124 @@
+% Blocks of the poster that every layout places: the figures with their labels and captions. The
+% text comes from content.tex and the sizes are given in millimeters by the layout.
+
+% The five versions of Homer with their labels on top:
+% \TeaserBlock{width}{font of the labels}{label of the fourth version}.
+\newcommand{\TeaserBlock}[3]{%
+  {#2% Each Homer stands 9.2/650 of the width to the right of the center of its cell of teaser.png.
+   \makebox[0pt][l]{\hspace{\dimexpr#1mm*92/6500\relax}%
+     \collabel{\dimexpr#1mm/5\relax}{ink}{\ColInput}\collabel{\dimexpr#1mm/5\relax}{ink}{\ColMethod}%
+     \collabel{\dimexpr#1mm/5\relax}{ink}{\ColFaired}\collabel{\dimexpr#1mm/5\relax}{ink}{#3}%
+     \collabel{\dimexpr#1mm/5\relax}{ink}{\ColOriginal}}\strut\par}
+  \vspace{3mm}
+  \includegraphics[width=#1mm, trim=0 300 0 0, clip]{teaser.png}\par}
+
+% Spot and Homer at the 22% level with their labels on top: \RendersBlock{width}{font of the labels}.
+\newcommand{\RendersBlock}[2]{%
+  {#2\collabel{\dimexpr#1mm/5\relax}{ink}{\ColInput}\collabel{\dimexpr#1mm/5\relax}{ink}{\ColMethod}%
+   \collabel{\dimexpr#1mm/5\relax}{ink}{\ColFaired}\collabel{\dimexpr#1mm/5\relax}{ink}{\ColSymmetryShort}%
+   \collabel{\dimexpr#1mm/5\relax}{ink}{\ColOriginal}\par}
+  \vspace{3mm}
+  \includegraphics[width=#1mm]{spot_22.png}\par
+  \vspace{5mm}
+  % Homer stands 2.6/340 of the width to the left of the center of its cell of homer_22.png.
+  \makebox[#1mm][l]{\hspace{\dimexpr#1mm*26/3400\relax}\includegraphics[width=#1mm]{homer_22.png}}\par}
+
+% The winding number of a closed sphere and of a sphere with a hole: \WFigure{width, a length}.
+\newcommand{\WFigure}[1]{%
+  \begin{minipage}{#1}
+    \includegraphics[width=#1]{w_cut.pdf}\par
+    \vspace{1mm}
+    {\captiontext\collabel{\dimexpr#1*1025/2260\relax}{ink2}{\WLabelA}%
+     \collabel{\dimexpr#1*1025/2260\relax}{ink2}{\WLabelB}\par}
+  \end{minipage}}
+
+% The same figure on a white panel, since its two images have a white background, with the
+% formula and what it shows at its right: \WBeside{width of the panel}{width of the text}.
+\newcommand{\WBeside}[2]{%
+  \begin{minipage}[c]{#1mm}%
+    \tikz\node[fill=white, rounded corners=4mm, inner sep=3mm]
+      {\begin{minipage}{\dimexpr#1mm-6mm\relax}\WFigure{\dimexpr#1mm-6mm\relax}\end{minipage}};%
+  \end{minipage}\hfill
+  \begin{minipage}[c]{#2mm}\resetspaces\raggedright
+    {\centering\fontsize{33}{41}\selectfont\Formula\par}
+    \vspace{5mm}
+    {\smalltext\WText}
+  \end{minipage}\par}
+
+% The stages of the method of [1] and of the contribution.
+\newcommand{\Pipeline}{%
+  \begin{tikzpicture}[node distance=12mm and 11mm]
+    \node[stage, text width=34mm] (e1) {Input};
+    \node[stage, text width=92mm, right=of e1] (p1) {Tetrahedralization,\\\(w\) and graph cut};
+    \node[own, draw=faired, fill=faired!12, text width=56mm, below=16mm of p1.south east,
+      anchor=north west, xshift=11mm] (s2) {Fairing\\\(\Delta^3 x = 0\)};
+    \node[stage, text width=34mm, below=16mm of e1] (e2) {Input};
+    \node[stage, text width=92mm, right=of e2] (p2) {Tetrahedralization,\\\(w\) and graph cut};
+    \node[stage, text width=34mm, right=36mm of s2, draw=ink, fill=white, line width=1.7mm,
+      font=\fontsize{20}{25}\selectfont\bfseries] (o2) {Output};
+    \node[stage, text width=34mm, draw=ink, fill=white, anchor=center] (o1)
+      at (o2.center |- p1.center) {Output};
+    \node[own, draw=symmetry, fill=symmetry!8, text width=54mm, anchor=north] (r)
+      at ($(p2.south)!0.5!(s2.south) + (0, -10mm)$) {Symmetry\\completion};
+    \node[note, anchor=south west, inner sep=0pt] at ($(e1.north west) + (0, 3mm)$)
+      {\bfseries \ColMethod};
+    \node[note, anchor=south west, inner sep=0pt] at ($(e2.north west) + (0, 3mm)$)
+      {\bfseries \SecContribution};
+    \draw[arrow] (e1) -- (p1);
+    \draw[arrow] (p1) -- (o1);
+    \draw[arrow] (e2) -- (p2);
+    \draw[arrow] (p2) -- (s2);
+    \draw[arrow] (s2) -- node[note, above=1mm, pos=0.42] {2nd pass} (o2);
+    \draw[arrow, draw=symmetry] (s2.south) |- node[note, pos=0.3, right=2mm, text=symmetry]
+      {1st pass} (r.east);
+    \draw[arrow, draw=symmetry] (r.west) -| node[note, pos=0.75, left=2mm, text=symmetry,
+      align=right] {2nd pass, with the\\mirrored faces} (p2.south);
+  \end{tikzpicture}}
+
+% The close-ups of the two stages with their labels below: \FairingImage{height of the image}
+% and \SymmetryImage likewise. Each one is as wide as its image.
+\newcommand{\FairingImage}[1]{%
+  \begin{minipage}[c]{\dimexpr#1mm*3000/1300\relax}\resetspaces\raggedright
+    \includegraphics[height=#1mm]{cap.png}\par
+    {\tinytext\collabel{\dimexpr#1mm*1500/1300\relax}{method}{method of [1]}%
+     \collabel{\dimexpr#1mm*1500/1300\relax}{fairedtext}{with fairing}\par}
+  \end{minipage}}
+\newcommand{\SymmetryImage}[1]{%
+  \begin{minipage}[c]{\dimexpr#1mm*2214/1295\relax}\resetspaces\raggedright
+    \includegraphics[height=#1mm]{mirror.png}\par
+    {\tinytext\collabel{\dimexpr#1mm*1107/1295\relax}{ink2}{input}%
+     \collabel{\dimexpr#1mm*1107/1295\relax}{symmetry}{mirrored faces}\par}
+  \end{minipage}}
+% A stage with its close-up on the left and its text on the right:
+% \StageRow{width of the left part}{image}{width of the text}{text}.
+\newcommand{\StageRow}[4]{%
+  \begin{minipage}[c]{#1mm}\centering #2\end{minipage}\hfill
+  \begin{minipage}[c]{#3mm}\resetspaces\raggedright #4\end{minipage}\par}
+% The error against the removed surface, with its caption: \ErrorChart{width}.
+\newcommand{\ErrorChart}[1]{%
+  \includegraphics[width=#1mm]{error.pdf}\par
+  \vspace{1.5mm}
+  {\captiontext\ChartCaption\par}}
+
+% The three big numbers: \BigNumbers{width of each}.
+\newcommand{\BigNumbers}[1]{%
+  \bignumber{#1mm}{fairedtext}{\NumA}{\NumAText}\hfill
+  \bignumber{#1mm}{burgundy}{\NumB}{\NumBText}\hfill
+  \bignumber{#1mm}{burgundy}{\NumC}{\NumCText}\par}
+
+% The mean error of every model and level, with the two lower orders of the fairing in between.
+\newcommand{\ResultsTable}{%
+  {\tinytext\setlength{\tabcolsep}{0pt}%
+   \begin{tabular*}{\linewidth}{@{\extracolsep{\fill}}lrrrrrrr@{}}
+     % The two headings take no width, so that they do not spread the columns below them.
+     & \multicolumn{3}{c}{\makebox[0pt][c]{\TableSpot}}
+     & \multicolumn{3}{c}{\makebox[0pt][c]{\TableHomer}} & \\
+     \tabhead{\TableHead} & 5\% & 10\% & 22\% & 5\% & 10\% & 22\% & \tabhead{\TableChange}\\[0.5mm]
+     \textcolor{method}{\bfseries method of [1]} & 0.93 & 1.74 & 3.48 & 0.92 & 1.54 & 3.02 & \\
+     \textcolor{ink2}{\RowLaplacian} & 1.02 & 1.68 & 3.28 & 0.93 & 1.56 & 3.17 & +2\%\\
+     \textcolor{ink2}{\RowBilaplacian} & 0.63 & 1.02 & 2.26 & 0.60 & 1.10 & 1.82 & −38\%\\
+     \textcolor{fairedtext}{\bfseries \RowFaired} & 0.57 & 0.92 & 1.91 & 0.46 & 1.17 & 1.86 & −42\%\\
+     \textcolor{symmetry}{\bfseries with fairing and symmetry} & 0.31 & 0.32 & 0.75 & 0.15 & 0.28 & 0.58 & −78\%\\
+   \end{tabular*}\par}
+  \vspace{2mm}
+  {\captiontext\TableCaption\par}}

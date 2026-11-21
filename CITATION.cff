@@ -1,0 +1,39 @@
+cff-version: 1.2.0
+message: "If you use this code, please cite it as below, together with the paper it builds on."
+title: "Completing broken meshes with generalized winding numbers, cap fairing and symmetry completion"
+authors:
+  - family-names: Allara
+    given-names: Lucas
+    affiliation: "Universidad Torcuato Di Tella"
+date-released: 2026-11-21
+license: MIT
+repository-code: "https://github.com/Lucas-Allara/Broken-mesh-completion"
+abstract: >-
+  An implementation in C++ of "Robust Inside-Outside Segmentation using Generalized Winding
+  Numbers" (Jacobson, Kavan and Sorkine-Hornung, SIGGRAPH 2013), with a conforming
+  tetrahedralization, a graph cut and the optional constraints of the paper, extended with two
+  stages that give shape to the holes, namely a tri-Laplacian fairing of the caps that keeps the
+  input fixed and a completion that mirrors the input across its symmetry plane.
+keywords:
+  - generalized winding numbers
+  - inside-outside segmentation
+  - mesh repair
+  - hole filling
+  - graph cut
+  - fairing
+  - symmetry
+references:
+  - type: article
+    title: "Robust Inside-Outside Segmentation using Generalized Winding Numbers"
+    authors:
+      - family-names: Jacobson
+        given-names: Alec
+      - family-names: Kavan
+        given-names: Ladislav
+      - family-names: Sorkine-Hornung
+        given-names: Olga
+    journal: "ACM Transactions on Graphics"
+    volume: 32
+    issue: 4
+    year: 2013
+    doi: 10.1145/2461912.2461916

@@ -1,0 +1,115 @@
+% Text of the poster. The figures come from figures/, made by poster_figures.py.
+\newcommand{\TitleFirst}{Completing}
+\newcommand{\TitleSecond}{broken meshes}
+\newcommand{\Author}{Lucas Allara}
+\newcommand{\Subtitle}{An implementation of Jacobson, Kavan and Sorkine-Hornung (SIGGRAPH 2013),\\
+  extended with cap fairing and symmetry completion}
+\newcommand{\Course}{Computer Graphics}
+\newcommand{\Date}{November 2026}
+\newcommand{\ColInput}{Input}
+\newcommand{\ColMethod}{Method of [1]}
+\newcommand{\ColFaired}{With fairing}
+\newcommand{\ColSymmetry}{With fairing and symmetry}
+\newcommand{\ColSymmetryShort}{With symmetry}
+\newcommand{\ColOriginal}{Original}
+
+\newcommand{\SecIntro}{Introduction}
+\newcommand{\SecContribution}{Contribution}
+\newcommand{\SecResults}{Results}
+\newcommand{\SecLimitations}{Limitations}
+\newcommand{\SecConclusions}{Conclusions}
+\newcommand{\SecReferences}{References}
+
+% ---------------------------------------------------------------- introduction
+\newcommand{\IntroTextA}{%
+  Many real meshes have holes, overlapping pieces or loose faces, and simulating or printing
+  a model requires knowing which points are inside. Jacobson et al.\ [1] use the generalized
+  winding number, which adds up the signed solid angles that the oriented faces subtend as seen
+  from \(p\).\par}
+\newcommand{\Formula}{\(w(p) = \dfrac{1}{4\pi} \displaystyle\sum_{f} \Omega_f(p)\)}
+\newcommand{\WLabelA}{closed mesh}
+\newcommand{\WLabelB}{with a hole}
+\newcommand{\WText}{%
+  On a closed mesh, \(w\) is 1 inside and 0 outside. With a hole it varies smoothly between
+  the two, and the level 0.5, dashed in the figure, already closes the sphere.\par}
+\newcommand{\IntroTextB}{%
+  The convex hull is tetrahedralized respecting the input faces [2]. A graph cut labels each
+  tetrahedron inside or outside by its \(w\), keeping neighbors of similar \(w\) together.
+  Two heuristics push the output, the boundary of the inside region, to be a manifold that
+  contains the input faces.\par}
+
+% ---------------------------------------------------------------- contribution
+\newcommand{\ContributionText}{%
+  Where surface was missing, the output of [1] is made of faces of the tetrahedralization,
+  which close each hole with a cap of flat triangles and no detail. Two stages are added after
+  the method, without modifying it.\par}
+\newcommand{\FairingText}{%
+  \textcolor{fairedtext}{\bfseries Fairing.} The input stays fixed. Each cap is subdivided
+  and its vertices solve \(\Delta^3 x = 0\) [4], which continues the surface around it in
+  position, tangent and curvature. A cap that overshoots is solved again with a lower order.
+  TetWild [3] can smooth such caps with the Laplacian alone.\par}
+\newcommand{\SymmetryText}{%
+  \textcolor{symmetry}{\bfseries Symmetry.} The plane that best maps the input onto itself is
+  found, ignoring the 20\% of the points that match worst so that the holes do not count. The
+  mirrored faces that fall in the holes are added to the input [5] and the method runs
+  again.\par}
+
+% ---------------------------------------------------------------- results
+\newcommand{\NumA}{−42\%}
+\newcommand{\NumAText}{error in the holes with fairing, on average over the 18 cases.}
+\newcommand{\NumB}{−78\%}
+\newcommand{\NumBText}{error in the holes with fairing and symmetry, on average over the 18 cases.}
+\newcommand{\NumC}{18/18}
+\newcommand{\NumCText}{cases in which each stage lowers the error of the one before.}
+\newcommand{\TeaserCaption}{Homer with 11\% of its surface removed. The method of [1] closes the holes with flat faces (error 2.07\%), fairing smooths the caps (1.51\%), and symmetry brings back the mouth and the hand (0.37\%).}
+\newcommand{\RendersCaption}{Spot and Homer at the 22\% level, with 28.8\% and 23.1\% of the surface
+  removed. Symmetry copies the hand and the foot of Homer from the other side. Its face is missing on
+  both sides of the plane and stays smooth.}
+\newcommand{\TableHead}{mean error in the holes}
+\newcommand{\TableSpot}{\tabhead{Spot}, 5\,856 triangles}
+\newcommand{\TableHomer}{\tabhead{Homer}, 12\,000 triangles}
+\newcommand{\TableChange}{change}
+\newcommand{\RowLaplacian}{fairing with \(\Delta\)}
+\newcommand{\RowBilaplacian}{fairing with \(\Delta^2\)}
+\newcommand{\RowFaired}{with fairing, \(\Delta^3\)}
+\newcommand{\TableCaption}{The means of the chart and of two lower orders of the fairing, with the mean
+  change over the 18 cases. With \(\Delta\), which only continues the position, the error does not go
+  down, and \(\Delta^3\) is lower than \(\Delta^2\) in 13 of them.}
+\newcommand{\ChartCaption}{Mean distance from the removed surface to the completed mesh, in percent of
+  the longest side of the bounding box. Each point averages three random sets of five holes, and its
+  bar spans them. The dotted line is the original measured against itself. The measure does not
+  penalize extra surface.}
+
+% ---------------------------------------------------------------- limitations and conclusions
+\newcommand{\LimitationsText}{%
+  Symmetry requires a symmetric model whose other side is intact. If surface is missing on
+  both sides of the plane, as with the face of Homer at 22\%, there is nothing to copy from.
+  Without symmetry, fairing completes the overall shape but not the small details.\par
+  \vspace{2mm}
+  A piece that a hole separates from the rest stays separated, because the cut does not
+  control the topology. The mirrored faces are not stitched to the input. With them, the
+  output of the second pass has loose pieces in 5 of the 18 cases and 4 non-manifold edges in
+  2 cases.\par}
+\newcommand{\ConclusionsText}{%
+  The method of [1] closes the holes, but it does not give shape to what is missing. On Spot
+  and Homer, a local fairing of the caps, which does not move the input, lowers the error in the
+  holes by 42\% on average, as long as it continues the tangent, since with the Laplacian the
+  error does not go down. Symmetry takes the reduction to 78\% by copying details that fairing
+  cannot invent.\par
+  \vspace{2mm}
+  The implementation, in C++, completes a model in one to two seconds on 16 cores. Future work
+  includes symmetries of parts of the model and a graph cut that controls the topology.\par}
+
+% ---------------------------------------------------------------- references
+\newcommand{\ReferencesText}{%
+  \bib{1}A.~Jacobson, L.~Kavan, O.~Sorkine-Hornung. Robust inside-outside segmentation using
+  generalized winding numbers. \emph{ACM TOG} 32(4), 2013.\par
+  \bib{2}H.~Si. TetGen, a Delaunay-based quality tetrahedral mesh generator. \emph{ACM TOMS}
+  41(2), 2015.\par
+  \bib{3}Y.~Hu et al. Tetrahedral meshing in the wild. \emph{ACM TOG} 37(4), 2018.\par
+  \bib{4}M.~Botsch, L.~Kobbelt. An intuitive framework for real-time freeform modeling.
+  \emph{ACM TOG} 23(3), 2004.\par
+  \bib{5}X.~Li et al. Symmetry and template guided completion of damaged skulls.
+  \emph{Computers \& Graphics} 35(4), 2011.\par}
+\newcommand{\Credits}{Spot is by K.~Crane and Homer comes from common-3d-test-models.
+  Images and measurements by the author.}
